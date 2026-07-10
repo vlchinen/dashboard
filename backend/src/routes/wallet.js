@@ -1,35 +1,36 @@
 const express = require('express');
-const { getWalletTransactions } = require('../dataSource');
+const { getWalletTransactions } = require('../dataSourceGgsheet');
 const {
   calculateSummary,
   calculateMonthlyVolume,
   calculateVolumeByCounterparty,
   sortTransactionsByTimeDescending,
   attachDirectionLabel,
+  paginate
 } = require('../aggregate');
 
 const router = express.Router();
 
-router.get('/summary', (req, res) => {
-  const rows = getWalletTransactions();
+router.get('/summary', async (req, res) => {
+  const rows = await getWalletTransactions();
   res.json(calculateSummary(rows));
 });
 
-router.get('/monthly-volume', (req, res) => {
-  const rows = getWalletTransactions();
+router.get('/monthly-volume', async (req, res) => {
+  const rows = await getWalletTransactions();
   res.json(calculateMonthlyVolume(rows));
 });
 
-router.get('/top-counterparties', (req, res) => {
-  const rows = getWalletTransactions();
+router.get('/top-counterparties', async (req, res) => {
+  const rows = await getWalletTransactions();
   res.json(calculateVolumeByCounterparty(rows));
 });
 
-router.get('/transactions', (req, res) => {
+router.get('/transactions', async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const pageSize = parseInt(req.query.pageSize, 10) || 10;
 
-  const rows = getWalletTransactions();
+  const rows = await getWalletTransactions();
   const sortedRows = sortTransactionsByTimeDescending(rows);
   const labeledRows = attachDirectionLabel(sortedRows);
   const pagedRows = paginate(labeledRows, page, pageSize);
@@ -42,9 +43,5 @@ router.get('/transactions', (req, res) => {
   });
 });
 
-function paginate(items, page, pageSize) {
-  const startIndex = (page - 1) * pageSize;
-  return items.slice(startIndex, startIndex + pageSize);
-}
 
 module.exports = router;

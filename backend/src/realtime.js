@@ -1,16 +1,19 @@
-const { getWalletTransactions } = require('./dataSource');
+const { getWalletTransactions } = require('./dataSourceGgsheet');
 const {
   calculateSummary,
   calculateMonthlyVolume,
   calculateVolumeByCounterparty,
+  sortTransactionsByTimeDescending,   // THÊM
+  attachDirectionLabel,               // THÊM
+  paginate, 
 } = require('./aggregate');
 
-const BROADCAST_INTERVAL_MS = 5000;
+const BROADCAST_INTERVAL_MS = 30000;
 
 let cache = null;
 
-function getRealtimeWalletData() {
-  const rows = getWalletTransactions();
+async function getRealtimeWalletData() {
+  const rows = await getWalletTransactions();
 
   return {
     summary: calculateSummary(rows),
@@ -27,7 +30,7 @@ function emitWalletData(target, data) {
 
 async function refreshCache(io) {
   try {
-    const latest = getRealtimeWalletData();
+    const latest = await getRealtimeWalletData();
 
     const changed =
       JSON.stringify(latest) !== JSON.stringify(cache);
@@ -50,9 +53,9 @@ async function refreshCache(io) {
   setTimeout(() => refreshCache(io), BROADCAST_INTERVAL_MS);
 }
 
-function setupRealtimeUpdates(io) {
+async function setupRealtimeUpdates(io) {
   // load cache lần đầu
-  cache = getRealtimeWalletData();
+  cache = await getRealtimeWalletData();
 
   io.on('connection', (socket) => {
     console.log(
@@ -61,6 +64,25 @@ function setupRealtimeUpdates(io) {
 
     // gửi cache luôn
     emitWalletData(socket, cache);
+
+    socket.on('getTransactions', async ({ page, pageSize }, callback) => {
+      try {
+        const rows = await getWalletTransactions();
+        const sortedRows = sortTransactionsByTimeDescending(rows);
+        const labeledRows = attachDirectionLabel(sortedRows);
+        const pagedRows = paginate(labeledRows, page, pageSize);
+
+        callback({
+          rows: pagedRows,
+          total: rows.length,
+          page,
+          pageSize,
+        });
+      } catch (err) {
+        console.error(err);
+        callback({ error: 'Không lấy được dữ liệu giao dịch' });
+      }
+    });
 
     socket.on('disconnect', () => {
       console.log(

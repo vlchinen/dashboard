@@ -10,6 +10,9 @@ backend/data/*.xlsx
 backend/data/*.xls
 backend/data/*.csv
 
+# Google service account credentials — chứa private key, tuyệt đối không commit
+backend/data/*.json
+
 # Build output
 frontend/dist/
 

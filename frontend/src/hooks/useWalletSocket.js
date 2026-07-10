@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 
-const socket = io('http://localhost:4000');
+export const socket = io('http://localhost:4000');
 
 export function useWalletSocket(eventName) {
   const [data, setData] = useState(null);
@@ -20,3 +20,4 @@ export function useWalletSocket(eventName) {
 
   return data;
 }
+

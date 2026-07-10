@@ -38,11 +38,12 @@ Web dashboard hiển thị dữ liệu giao dịch ví on-chain (ETH) gần-real
 - Khi chuyển sang WebSocket: giữ nguyên `dataSource.js` và `aggregate.js`, chỉ thêm cơ chế đẩy data qua socket thay vì response HTTP.
 - Khi đổi domain dữ liệu (như từ sales → wallet): giữ nguyên toàn bộ layer/pattern, chỉ đổi tên hàm/route/component cho khớp domain mới (không giữ tên cũ gây hiểu nhầm).
 
-## Chế độ học (khi mình muốn tự tay code)
-- Khi mình nói kiểu "chỉ đưa code", "tao tự sửa", "dạy tao" — KHÔNG tự động Edit/Write vào file.
-- Thay vào đó: đưa đoạn code cần thêm/sửa, nói rõ **file nào, đặt ở đâu trong file đó** (trước/sau dòng nào, trong hàm nào), và nếu có file liên quan khác cần đụng tới thì liệt kê rõ luôn.
-- Đây là để tự gõ tay học logic, không phải vì code sai — nên giải thích ngắn gọn "vì sao" đoạn code đó hoạt động, không chỉ đưa code suông.
-- Chế độ này không áp dụng cho việc sửa file rule/config (CLAUDE.md, .gitignore, package.json khi cài lib...) — những cái đó vẫn tự làm bình thường như trước.
+## Quy trình build code (mặc định cho MỌI thay đổi code, không cần nói trigger word)
+1. Trước khi viết code: trình bày **kiến trúc/kế hoạch** (đụng file nào, module nào, luồng data thế nào) + **giải thích công nghệ** liên quan (vì sao chọn cách này, khái niệm mới nào cần biết) — không code trước khi qua bước này.
+2. Đợi mình xác nhận ("ok") rồi mới đưa code.
+3. Mặc định: KHÔNG tự động Edit/Write vào file code — chỉ đưa đoạn code cần thêm/sửa, nói rõ **file nào, đặt ở đâu trong file đó** (trước/sau dòng nào, trong hàm nào), liệt kê file liên quan khác nếu có. Giải thích ngắn gọn "vì sao" đoạn code hoạt động, không đưa code suông.
+4. Ngoại lệ: nếu mình nói rõ kiểu "mày tự sửa luôn", "tự chỉnh code đi" cho đúng tác vụ đó — thì được tự động Edit/Write bình thường cho tác vụ đó thôi, không phải xin phép lại từ đầu mỗi dòng.
+5. Bước 1-2 (trình bày kiến trúc trước khi code) không áp dụng cho việc sửa file rule/config (CLAUDE.md, .gitignore, package.json khi cài lib...) — vẫn tự làm ngay như trước, không cần hỏi trước cho mấy file này.
 
 ## Roadmap
 1. Excel + REST API + polling (đang làm)

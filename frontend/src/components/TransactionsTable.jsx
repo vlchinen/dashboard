@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { fetchTransactions } from '../api/walletApi';
+import { fetchTransactionsViaSocket } from '../api/walletSocketApi';
 import { usePolling } from '../hooks/usePolling';
 
 const PAGE_SIZE = 10;
@@ -23,7 +23,7 @@ function getCounterpartyForDisplay(tx) {
 
 export default function TransactionsTable() {
   const [page, setPage] = useState(1);
-  const data = usePolling(() => fetchTransactions(page, PAGE_SIZE), POLL_INTERVAL_MS, [page]);
+  const data = usePolling(() => fetchTransactionsViaSocket(page, PAGE_SIZE), POLL_INTERVAL_MS, [page]);
 
   if (!data) {
     return null;
@@ -36,7 +36,7 @@ export default function TransactionsTable() {
   }
 
   function goToNextPage() { 
-    setPage((currentPage) => Math.min(totalPages, currentPage + 0.5));
+    setPage((currentPage) => Math.min(totalPages, currentPage + 1));
   }
 
   return (
