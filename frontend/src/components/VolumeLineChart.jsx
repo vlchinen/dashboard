@@ -15,7 +15,7 @@ export default function VolumeLineChart({ data }) {
 
   return (
     <div className="chart-card">
-      <h3>Khối lượng ETH theo tháng</h3>
+      <h3>Monthly ETH Volume</h3>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />

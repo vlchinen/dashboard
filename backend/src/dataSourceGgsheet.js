@@ -5,7 +5,7 @@ const CREDENTIALS_PATH = path.join(__dirname, '..', process.env.GOOGLE_SHEETS_CR
 const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
 const SHEET_RANGE = 'Transactions!A:I';
 
-// Google Sheets dùng cùng hệ đếm ngày với Excel: số ngày kể từ 30/12/1899.
+// Google Sheets uses the same date system as Excel: number of days since 1899-12-30.
 const SHEETS_EPOCH_OFFSET_DAYS = 25569;
 
 async function getWalletTransactions() {

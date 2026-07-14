@@ -22,7 +22,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <button onClick={handleToggleClick}>{showTest ? 'Ẩn data' : 'Hiện data'}</button>
+      <button onClick={handleToggleClick}>{showTest ? 'Hide Data' : 'Show Data'}</button>
        {showTest && (
         <>
           <h1>Wallet Dashboard - this project for research only</h1>

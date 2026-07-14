@@ -1,6 +1,6 @@
 # Dashboard
 
-Web dashboard hiển thị dữ liệu giao dịch ví on-chain (ETH) gần-realtime: bảng dữ liệu + biểu đồ khối lượng giao dịch.
+A near-realtime web dashboard for on-chain (ETH) wallet transactions: data table + transaction volume charts.
 
 ## Setup
 
@@ -8,9 +8,9 @@ Web dashboard hiển thị dữ liệu giao dịch ví on-chain (ETH) gần-real
 ```
 cd backend
 npm install
-cp .env.example .env   # rồi điền WALLET_ADDRESS của bạn vào .env
+cp .env.example .env   # then fill in your WALLET_ADDRESS, Google Sheets ID, and credentials path
 ```
-Đặt file Excel dữ liệu giao dịch của bạn vào `backend/data/` (cột: Hash, Block, Time, From, To, ETH, GasUsed, GasPrice, Status), sửa tên file trong `backend/src/dataSource.js` nếu cần.
+Data is read from a Google Sheet (columns: Hash, Block, Time, From, To, ETH, GasUsed, GasPrice, Status) via a Google service account — see `.env.example` for the required variables.
 
 ```
 npm run dev   # http://localhost:4000
@@ -23,12 +23,11 @@ npm install
 npm run dev   # http://localhost:5173
 ```
 
-## Kiến trúc
-- `backend/src/dataSource.js` — đọc dữ liệu nguồn (hiện tại: Excel; sau này: Google Sheets)
-- `backend/src/aggregate.js` — tính toán/tổng hợp dữ liệu cho dashboard
-- `backend/src/routes/wallet.js` — API endpoints (`/api/wallet/*`)
-- `frontend/src/api/walletApi.js` — gọi API backend
-- `frontend/src/hooks/usePolling.js` — polling dữ liệu định kỳ (sau này thay bằng WebSocket)
-- `frontend/src/components/` — mỗi chart/bảng/stat-card là 1 component riêng
-
-Chi tiết đầy đủ: xem [CLAUDE.md](CLAUDE.md).
+## Architecture
+- `backend/src/dataSourceGgsheet.js` — reads the source data (currently Google Sheets; `dataSourceExcel.js` is kept as a reference for the earlier Excel-based version)
+- `backend/src/aggregate.js` — computes/aggregates data for the dashboard
+- `backend/src/routes/wallet.js` — REST API endpoints (`/api/wallet/*`)
+- `backend/src/realtime.js` — Socket.IO: broadcasts data on change, and answers paginated transaction requests
+- `frontend/src/api/walletApi.js` — REST API calls
+- `frontend/src/hooks/useWalletSocket.js` — shared WebSocket connection + realtime data hook
+- `frontend/src/components/` — each chart/table/stat-card is its own component

@@ -3,9 +3,9 @@ const {
   calculateSummary,
   calculateMonthlyVolume,
   calculateVolumeByCounterparty,
-  sortTransactionsByTimeDescending,   // THÊM
-  attachDirectionLabel,               // THÊM
-  paginate, 
+  sortTransactionsByTimeDescending,
+  attachDirectionLabel,
+  paginate,
 } = require('./aggregate');
 
 const BROADCAST_INTERVAL_MS = 30000;
@@ -39,12 +39,12 @@ async function refreshCache(io) {
       cache = latest;
 
       console.log(
-        `Data changed -> broadcast cho ${io.engine.clientsCount} client`
+        `Data changed -> broadcasting to ${io.engine.clientsCount} client(s)`
       );
 
       emitWalletData(io, cache);
     } else {
-      console.log('Data không đổi -> bỏ qua broadcast');
+      console.log('Data unchanged -> skipping broadcast');
     }
   } catch (err) {
     console.error(err);
@@ -54,15 +54,15 @@ async function refreshCache(io) {
 }
 
 async function setupRealtimeUpdates(io) {
-  // load cache lần đầu
+  // load the initial cache
   cache = await getRealtimeWalletData();
 
   io.on('connection', (socket) => {
     console.log(
-      `Client kết nối: ${socket.id} (${io.engine.clientsCount})`
+      `Client connected: ${socket.id} (${io.engine.clientsCount})`
     );
 
-    // gửi cache luôn
+    // send the cached data right away
     emitWalletData(socket, cache);
 
     socket.on('getTransactions', async ({ page, pageSize }, callback) => {
@@ -80,13 +80,13 @@ async function setupRealtimeUpdates(io) {
         });
       } catch (err) {
         console.error(err);
-        callback({ error: 'Không lấy được dữ liệu giao dịch' });
+        callback({ error: 'Failed to fetch transaction data' });
       }
     });
 
     socket.on('disconnect', () => {
       console.log(
-        `Client ngắt kết nối: ${socket.id} (${io.engine.clientsCount})`
+        `Client disconnected: ${socket.id} (${io.engine.clientsCount})`
       );
     });
   });

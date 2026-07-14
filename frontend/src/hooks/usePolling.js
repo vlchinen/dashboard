@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-// Gọi fetchFn ngay lập tức, sau đó lặp lại mỗi intervalMs để dữ liệu
-// luôn cập nhật gần-realtime. deps giống deps của useEffect: đổi deps
-// sẽ khởi động lại vòng lặp polling (dùng khi fetchFn phụ thuộc tham số, vd trang hiện tại).
+// Calls fetchFn immediately, then repeats every intervalMs so the data stays
+// near-realtime. deps works like useEffect's deps: changing them restarts the
+// polling loop (useful when fetchFn depends on a parameter, e.g. the current page).
 export function usePolling(fetchFn, intervalMs, deps = []) {
   const [data, setData] = useState(null);
 

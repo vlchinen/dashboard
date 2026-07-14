@@ -24,7 +24,7 @@ export default function CounterpartyBarChart({ data }) {
 
   return (
     <div className="chart-card">
-      <h3>Top 5 địa chỉ giao dịch nhiều nhất</h3>
+      <h3>Top 5 Counterparties by Volume</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" />

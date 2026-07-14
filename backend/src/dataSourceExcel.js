@@ -3,9 +3,9 @@ const XLSX = require('xlsx');
 
 const EXCEL_FILE_PATH = path.join(__dirname, '../data/wallet_transactions.xlsx');
 
-// Đọc lại file mỗi lần gọi (không cache) để dashboard luôn thấy dữ liệu mới nhất
-// khi file Excel bị chỉnh sửa. Giai đoạn sau sẽ thay nội dung hàm này bằng gọi
-// Google Sheets API — phần còn lại của app không cần đổi gì.
+// Re-read the file on every call (no caching) so the dashboard always sees the latest
+// data whenever the Excel file is edited. Kept as a reference now that the app reads
+// from Google Sheets instead — see dataSourceGgsheet.js.
 function getWalletTransactions() {
   const workbook = XLSX.readFile(EXCEL_FILE_PATH, { cellDates: true });
   const firstSheetName = workbook.SheetNames[0];

@@ -20,5 +20,5 @@ const io = new Server(httpServer, {
 setupRealtimeUpdates(io); 
 
 httpServer.listen(PORT, () => {
-  console.log(`Backend đang chạy tại http://localhost:${PORT}`);
+  console.log(`Backend running at http://localhost:${PORT}`);
 });

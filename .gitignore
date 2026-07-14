@@ -1,17 +1,20 @@
 # Dependencies
 node_modules/
 
-# Env / secrets — chứa WALLET_ADDRESS thật, không commit
+# Env / secrets — contains real WALLET_ADDRESS, never commit
 .env
 .env.local
 
-# Data thật — chứa thông tin ví/giao dịch cá nhân, không commit
+# Real data — contains personal wallet/transaction info, never commit
 backend/data/*.xlsx
 backend/data/*.xls
 backend/data/*.csv
 
-# Google service account credentials — chứa private key, tuyệt đối không commit
+# Google service account credentials — contains a private key, never commit
 backend/data/*.json
+
+# Personal AI-assistant working notes, not project documentation
+CLAUDE.md
 
 # Build output
 frontend/dist/

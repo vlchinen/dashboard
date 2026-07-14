@@ -6,7 +6,7 @@ const PAGE_SIZE = 10;
 const POLL_INTERVAL_MS = 5000;
 
 function formatTime(dateValue) {
-  return new Date(dateValue).toLocaleString('vi-VN');
+  return new Date(dateValue).toLocaleString('en-US');
 }
 
 function truncateHash(hash) {
@@ -18,7 +18,7 @@ function truncateAddress(address) {
 }
 
 function getCounterpartyForDisplay(tx) {
-  return tx.direction === 'Gửi' ? tx.To : tx.From;
+  return tx.direction === 'Sent' ? tx.To : tx.From;
 }
 
 export default function TransactionsTable() {
@@ -41,16 +41,16 @@ export default function TransactionsTable() {
 
   return (
     <div className="table-card">
-      <h3>Giao dịch gần đây</h3>
+      <h3>Recent Transactions</h3>
       <table>
         <thead>
           <tr>
-            <th>Thời gian</th>
+            <th>Time</th>
             <th>Hash</th>
-            <th>Chiều</th>
-            <th>Đối tác</th>
+            <th>Direction</th>
+            <th>Counterparty</th>
             <th>ETH</th>
-            <th>Trạng thái</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -68,13 +68,13 @@ export default function TransactionsTable() {
       </table>
       <div className="pagination">
         <button onClick={goToPreviousPage} disabled={page <= 1}>
-          Trước
+          Previous
         </button>
         <span>
-          Trang {page}/{totalPages}
+          Page {page}/{totalPages}
         </span>
         <button onClick={goToNextPage} disabled={page >= totalPages}>
-          Sau
+          Next
         </button>
       </div>
     </div>

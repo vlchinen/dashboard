@@ -1,9 +1,9 @@
-// Địa chỉ ví chủ dashboard — dùng để xác định chiều giao dịch (gửi/nhận).
-// Lấy từ biến môi trường, không hardcode để không lộ địa chỉ khi đưa code lên GitHub.
+// Dashboard owner's wallet address — used to determine transaction direction (sent/received).
+// Read from an environment variable, never hardcoded, so it isn't exposed when the code is pushed to GitHub.
 const WALLET_ADDRESS = process.env.WALLET_ADDRESS;
 
-// Mỗi hàm ở đây làm đúng một việc: nhận danh sách giao dịch (rows), trả về
-// dữ liệu đã tính toán sẵn cho một phần cụ thể của dashboard.
+// Each function here does exactly one thing: takes the list of transactions (rows) and
+// returns data already computed for one specific part of the dashboard.
 
 function calculateSummary(rows) {
   const totalTransactions = rows.length;
@@ -47,7 +47,7 @@ function sortTransactionsByTimeDescending(rows) {
   return [...rows].sort((a, b) => new Date(b.Time) - new Date(a.Time));
 }
 
-// Gắn thêm nhãn "chiều" (Gửi/Nhận/Nội bộ) cho từng dòng — chỉ cần cho bảng hiển thị.
+// Attach a "direction" label (Sent/Received/Internal) to each row — only needed for table display.
 function attachDirectionLabel(rows) {
   return rows.map((row) => ({ ...row, direction: getDirectionLabel(row) }));
 }
@@ -56,10 +56,10 @@ function getDirectionLabel(row) {
   const isFromWallet = row.From === WALLET_ADDRESS;
   const isToWallet = row.To === WALLET_ADDRESS;
 
-  if (isFromWallet && isToWallet) return 'Nội bộ';
-  if (isFromWallet) return 'Gửi';
-  if (isToWallet) return 'Nhận';
-  return 'Khác';
+  if (isFromWallet && isToWallet) return 'Internal';
+  if (isFromWallet) return 'Sent';
+  if (isToWallet) return 'Received';
+  return 'Other';
 }
 
 function getCounterpartyAddress(row) {
