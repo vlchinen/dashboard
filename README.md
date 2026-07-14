@@ -1,6 +1,11 @@
-# Dashboard
+# Wallet Transactions Dashboard (learning project)
 
-A near-realtime web dashboard for on-chain (ETH) wallet transactions: data table + transaction volume charts.
+A small project I built to understand how a frontend and backend actually talk to each other — how data flows from a source, through backend aggregation, out to the client, and how a REST API differs from a WebSocket connection in practice. The use case (an ETH wallet transactions dashboard, backed by a Google Sheet) is just a vehicle for that; it's not meant to be a polished product or a demonstration of "full-stack" breadth.
+
+## What it does
+- Backend reads wallet transaction rows from a Google Sheet and aggregates them (monthly volume, top counterparties, summary stats, paginated transaction list)
+- Stat cards and charts update in near-realtime: the backend pushes data over a WebSocket (Socket.IO) whenever it changes, instead of the frontend polling on a timer
+- The transaction table still requests its data on demand (page by page) over the same WebSocket connection, using an ack/callback — a REST-style request/response, just carried over a persistent socket instead of a new HTTP call each time
 
 ## Setup
 
@@ -23,7 +28,7 @@ npm install
 npm run dev   # http://localhost:5173
 ```
 
-## Architecture
+## Code layout
 - `backend/src/dataSourceGgsheet.js` — reads the source data (currently Google Sheets; `dataSourceExcel.js` is kept as a reference for the earlier Excel-based version)
 - `backend/src/aggregate.js` — computes/aggregates data for the dashboard
 - `backend/src/routes/wallet.js` — REST API endpoints (`/api/wallet/*`)
